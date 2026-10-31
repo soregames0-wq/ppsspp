@@ -55,6 +55,7 @@
         <meta-data android:name="android.max_aspect" android:value="2.4" />
         <activity
             android:name=".PpssppActivity"
+            android:process=":game"
             android:configChanges="locale|keyboard|keyboardHidden|navigation|uiMode|orientation|screenSize|screenLayout|smallestScreenSize|density"
             android:theme="@style/ppsspp_style"
 			android:launchMode="singleInstance"
@@ -63,8 +64,6 @@
             <property android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY" android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -139,6 +138,17 @@
 				android:resource="@xml/file_paths" />
 		</provider>
         <profileable android:shell="true" android:enabled="true" />
+    
+        <activity android:name=".GTLauncherActivity"
+            android:exported="true"
+            android:label="Gran Turismo PSP"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,37 @@
+name: Build GT APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - name: Build
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleNormalOptimized --no-daemon || ./gradlew assembleOptimized --no-daemon
+      - name: Sign (debug key) any unsigned APK
+        run: |
+          keytool -genkeypair -keystore gt.jks -storepass gt123456 -keypass gt123456 -alias gt -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=GT"
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          mkdir -p out
+          for f in $(find . -name "*.apk" -path "*outputs*"); do
+            n=$(basename $f .apk)
+            $BT/zipalign -f 4 $f out/$n-aligned.apk
+            $BT/apksigner sign --ks gt.jks --ks-pass pass:gt123456 --key-pass pass:gt123456 --out out/$n-signed.apk out/$n-aligned.apk
+          done
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GT-APK
+          path: out/*-signed.apk

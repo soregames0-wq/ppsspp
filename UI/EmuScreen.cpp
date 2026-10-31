@@ -551,7 +551,7 @@ void EmuScreen::sendMessage(UIMessage message, const char *value) {
 	// External commands, like from the Windows UI.
 	// This happens on the main thread.
 	if (message == UIMessage::REQUEST_GAME_PAUSE && screenManager()->topScreen() == this) {
-		screenManager()->push(new GamePauseScreen(gamePath_, bootPending_));
+		System_ExitApp(); /* GT_BLOCK: voltar = sair pro menu GT */
 	} else if (message == UIMessage::REQUEST_GAME_STOP) {
 		// We will push MainScreen in update().
 		if (bootPending_) {
@@ -684,7 +684,7 @@ void EmuScreen::sendMessage(UIMessage message, const char *value) {
 				// use this as the fallback way to get into the menu.
 				// Don't do it on the first resume though, in case we launch directly into emuscreen, like from a frontend - see #18926
 				if (!equals(value, "first")) {
-					screenManager()->push(new GamePauseScreen(gamePath_, bootPending_));
+					System_ExitApp(); /* GT_BLOCK: voltar = sair pro menu GT */
 				}
 			}
 		}
@@ -1519,7 +1519,7 @@ void EmuScreen::update() {
 
 	if (pauseTrigger_) {
 		pauseTrigger_ = false;
-		screenManager()->push(new GamePauseScreen(gamePath_, bootPending_));
+		System_ExitApp(); /* GT_BLOCK: voltar = sair pro menu GT */
 	}
 
 	if (!PSP_IsInited())
