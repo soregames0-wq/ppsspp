@@ -13,7 +13,7 @@ jobs:
           submodules: recursive
           fetch-depth: 0
       - name: Fetch tags
-        run: git fetch --tags https://github.com/hrydgard/ppsspp.git
+        run: git fetch --tags --no-recurse-submodules https://github.com/hrydgard/ppsspp.git || true
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
