@@ -1084,6 +1084,7 @@ public class PpssppActivity extends AppCompatActivity implements SensorEventList
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+        if (isFinishing()) { new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() { public void run() { android.os.Process.killProcess(android.os.Process.myPid()); } }, 1200); } // GT_KILL
 		if (m_hasNoNativeBinary) {
 			return;
 		}
